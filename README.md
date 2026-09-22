@@ -1,4 +1,4 @@
-# StayFlow
+# SamUp
 
 ## Overview
 StayFlow is the student-facing mobile app of the Student Accommodation Management System for a private off-campus accommodation owner. A student resident can view accommodation blocks and rooms, their rental agreement, monthly payment history and the housing policies. The owner-side management console is a separate ASP.NET MVC web application and is not part of this Flutter build.
