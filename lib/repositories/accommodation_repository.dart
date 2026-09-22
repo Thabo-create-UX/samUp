@@ -31,7 +31,7 @@ class AccommodationRepository {
         roomType: 'Single Room',
         bedsLabel: '1 Bed',
         monthlyRent: 3500.00,
-        imageAsset: '',
+        imageAsset: 'assets/images/room1.1.jpg',
         amenities: [
           'Wi-Fi',
           'Study desk',
@@ -39,7 +39,7 @@ class AccommodationRepository {
           'Bed',
           'Shared kitchen',
         ],
-        occupancy: RoomOccupancy.occupied,
+        occupancy: RoomOccupancy.available,
       ),
       Room(
         id: 'room-102',
@@ -48,7 +48,7 @@ class AccommodationRepository {
         roomType: 'Shared Room',
         bedsLabel: '2 Beds',
         monthlyRent: 2800.00,
-        imageAsset: '',
+        imageAsset: 'assets/images/room2.png',
         amenities: [
           'Wi-Fi',
           'Study desk',
@@ -64,13 +64,10 @@ class AccommodationRepository {
         roomType: 'Single Room',
         bedsLabel: '1 Bed',
         monthlyRent: 3700.00,
-        imageAsset: '',
+        imageAsset: 'assets/images/room3.png',
         amenities: [
           'Wi-Fi',
-          'Study desk',
-          'Wardrobe',
-          'Bed',
-          'Shared kitchen',
+          'Open Space',
         ],
         occupancy: RoomOccupancy.available,
       ),
