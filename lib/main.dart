@@ -34,7 +34,7 @@ class StayFlowApp extends StatelessWidget {
 
         // Accommodation service
         ProxyProvider<AccommodationRepository, AccommodationService>(
-          update: (_, repository, __) {
+          update: (_, repository, _) {
             return AccommodationService(
               repository: repository,
             );

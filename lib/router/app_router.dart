@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:primio_app/screens/payment_screen.dart';
+import '../models/load_status.dart';
+import '../providers/accommodation_provider.dart';
 import 'package:provider/provider.dart';
-
 import '../models/agreement.dart';
 import '../models/payment.dart';
 import '../models/room.dart';
 import '../models/term_item.dart';
-import '../providers/accommodation_provider.dart';
-import '../repositories/accommodation_repository.dart';
+
+
 import '../screens/agreement_details_screen.dart';
 import '../screens/agreements_screen.dart';
 import '../screens/app_shell.dart';
@@ -21,7 +22,7 @@ import '../screens/register_screen.dart';
 import '../screens/room_details_screen.dart';
 import '../screens/rooms_screen.dart';
 import '../screens/terms_screen.dart';
-import '../services/accommodation_service.dart';
+
 
 class AppRouter {
   static final router = GoRouter(
@@ -46,21 +47,20 @@ class AppRouter {
       ),
 
       ShellRoute(
-        builder: (context, state, child) {
-          final repository = context.read<AccommodationRepository>();
+  builder: (context, state, child) {
+    final accommodationProvider =
+        context.read<AccommodationProvider>();
 
-          return ChangeNotifierProvider(
-            create: (_) => AccommodationProvider(
-              service: AccommodationService(
-                repository: repository,
-              ),
-            )..load(),
-            child: AppShell(
-              location: state.uri.path,
-              child: child,
-            ),
-          );
-        },
+    if (accommodationProvider.status == LoadStatus.loading &&
+        accommodationProvider.data == null) {
+      accommodationProvider.load();
+    }
+
+    return AppShell(
+      location: state.uri.path,
+      child: child,
+    );
+  },
         routes: [
           GoRoute(
             path: '/rooms',
