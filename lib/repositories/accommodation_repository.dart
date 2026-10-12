@@ -17,12 +17,15 @@ class AccommodationRepository {
     );
   }
 
+  // Load the profile belonging to the logged-in user.
   final profile = await client
       .from('profiles')
-      .select()
+      .select('id, full_name, role, phone, email, created_at')
       .eq('id', user.id)
       .maybeSingle();
 
+  // If the profile row does not exist, use the authenticated
+  // account's metadata where available.
   final Map<String, dynamic> row =
       profile ?? user.userMetadata ?? <String, dynamic>{};
 
@@ -39,24 +42,49 @@ class AccommodationRepository {
     return result.toString().trim();
   }
 
-  return Student(
-    id: user.id,
-    fullName: value(
+  final metadata = user.userMetadata ?? <String, dynamic>{};
+
+  String metadataValue(
+    String key, {
+    String fallback = 'Not provided',
+  }) {
+    final result = metadata[key];
+
+    if (result == null || result.toString().trim().isEmpty) {
+      return fallback;
+    }
+
+    return result.toString().trim();
+  }
+
+  final fullName = value(
+    'full_name',
+    fallback: metadataValue(
       'full_name',
       fallback: user.email?.split('@').first ?? 'Student',
     ),
-    studentNumber: value('student_number'),
+  );
+
+  return Student(
+    id: user.id,
+    fullName: fullName,
+    studentNumber: metadataValue('student_number'),
     email: user.email ?? value('email'),
-    phone: value('phone'),
-    institution: value('institution'),
-    course: value('course'),
-    emergencyContactName: value('emergency_contact_name'),
-    emergencyContactPhone: value('emergency_contact_phone'),
-    roomId: value('room_id', fallback: ''),
-    isActiveResident: row['is_active_resident'] == true,
+    phone: value(
+      'phone',
+      fallback: metadataValue('phone'),
+    ),
+    institution: metadataValue('institution'),
+    course: metadataValue('course'),
+    emergencyContactName:
+        metadataValue('emergency_contact_name'),
+    emergencyContactPhone:
+        metadataValue('emergency_contact_phone'),
+    roomId: metadataValue('room_id', fallback: ''),
+    isActiveResident:
+        metadata['is_active_resident'] == true,
   );
 }
-
   Future<List<Room>> getRooms() async {
     return const [
       Room(

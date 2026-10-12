@@ -11,11 +11,11 @@ import 'package:primio_app/main.dart';
 
 
 void main() {
-  testWidgets('StayFlow app loads', (WidgetTester tester) async {
-    await tester.pumpWidget(const StayFlowApp());
+  testWidgets('SamUp app loads', (WidgetTester tester) async {
+    await tester.pumpWidget(const SamUp());
 
     await tester.pumpAndSettle();
 
-    expect(find.text('StayFlow'), findsOneWidget);
+    expect(find.text('SamUp'), findsOneWidget);
   });
 }

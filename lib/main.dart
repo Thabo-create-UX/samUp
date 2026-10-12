@@ -17,11 +17,11 @@ Future<void> main() async {
     publishableKey: 'sb_publishable_xPyhljI8-5mrX_yP_GSkjA_9AqIW1sZ',
   );
 
-  runApp(const StayFlowApp());
+  runApp(const SamUp());
 }
 
-class StayFlowApp extends StatelessWidget {
-  const StayFlowApp({super.key});
+class SamUp extends StatelessWidget {
+  const SamUp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +65,7 @@ class StayFlowApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp.router(
-        title: 'StayFlow',
+        title: 'SamUp',
         routerConfig: AppRouter.router,
         theme: AppTheme.lightTheme,
       ),
