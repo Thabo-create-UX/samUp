@@ -4,23 +4,58 @@ import '../models/payment.dart';
 import '../models/room.dart';
 import '../models/student.dart';
 import '../models/term_item.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class AccommodationRepository {
   Future<Student> getCurrentStudent() async {
-    return const Student(
-      id: 'student-001',
-      fullName: 'Thabo Kayane',
-      studentNumber: '219015324',
-      email: 'thabo@example.com',
-      phone: '071 000 0000',
-      institution: 'Central University of Technology',
-      course: 'Diploma in Information Technology',
-      emergencyContactName: 'Emergency Contact',
-      emergencyContactPhone: '072 000 0000',
-      roomId: 'room-101',
-      isActiveResident: true,
+  final client = Supabase.instance.client;
+  final user = client.auth.currentUser;
+
+  if (user == null) {
+    throw StateError(
+      'Please sign in to view your student profile.',
     );
   }
+
+  final profile = await client
+      .from('profiles')
+      .select()
+      .eq('id', user.id)
+      .maybeSingle();
+
+  final Map<String, dynamic> row =
+      profile ?? user.userMetadata ?? <String, dynamic>{};
+
+  String value(
+    String key, {
+    String fallback = 'Not provided',
+  }) {
+    final result = row[key];
+
+    if (result == null || result.toString().trim().isEmpty) {
+      return fallback;
+    }
+
+    return result.toString().trim();
+  }
+
+  return Student(
+    id: user.id,
+    fullName: value(
+      'full_name',
+      fallback: user.email?.split('@').first ?? 'Student',
+    ),
+    studentNumber: value('student_number'),
+    email: user.email ?? value('email'),
+    phone: value('phone'),
+    institution: value('institution'),
+    course: value('course'),
+    emergencyContactName: value('emergency_contact_name'),
+    emergencyContactPhone: value('emergency_contact_phone'),
+    roomId: value('room_id', fallback: ''),
+    isActiveResident: row['is_active_resident'] == true,
+  );
+}
 
   Future<List<Room>> getRooms() async {
     return const [
